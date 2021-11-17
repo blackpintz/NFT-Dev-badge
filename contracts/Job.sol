@@ -98,7 +98,6 @@ contract Job is ReentrancyGuard {
             msg.sender,
             url
         );
-        // Add functionality to update jobSubmitted struct
     }
 
     function transferRewardsAndNft(uint itemId, address nftContract, uint submissionId) public payable nonReentrant {
@@ -113,12 +112,6 @@ contract Job is ReentrancyGuard {
         idToJobItem[itemId].approve = true;
     }
 
-    // function confirmJobNotComplete(uint itemId) public {
-    //     require(idToJobItem[itemId].assignmentTaker != address(0), "Invalid address.");
-    //     require(idToJobItem[itemId].complete == false, "The job is already market incomplete.");
-    //     idToJobItem[itemId].assignmentTaker = address(0);
-    //     idToJobItem[itemId].complete = false;
-    // }
 
     function fetchJobItems() public view returns (JobItem[] memory) {
          uint jobCount = _jobIds.current();
