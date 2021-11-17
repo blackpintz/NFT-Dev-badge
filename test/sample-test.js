@@ -26,9 +26,6 @@ describe("Job", function () {
     // await deployedJob.markJobItemComplete(2)
     await deployedJob.transferRewardsAndNft(1,nftContractAddress,1, {value: rewardPrice})
 
-   
-    // await deployedJob.connect(geAddress).transferRewardsAndNft(1, nftContractAddress)
-
     const jobsPosted = await deployedJob.fetchJobItems()
     const jobsSubmitted = await deployedJob.fetchJobsSubmitted()
     const jobsApproved = await deployedJob.fetchJobsApproved()
