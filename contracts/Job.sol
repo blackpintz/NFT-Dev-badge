@@ -101,9 +101,9 @@ contract Job is ReentrancyGuard {
     }
 
     function transferRewardsAndNft(uint itemId, address nftContract, uint submissionId) public payable nonReentrant {
-        require(idToJobItem[itemId].complete == true);
-        require(msg.value == idToJobItem[itemId].reward);
-        require(idToJobSubmitted[submissionId].jobId == itemId);
+        require(idToJobItem[itemId].complete == true, "The job is marked as incomplete");
+        require(msg.value == idToJobItem[itemId].reward, "You do not have enough money to make this transaction.");
+        require(idToJobSubmitted[submissionId].jobId == itemId, "JobId does not match.");
 
         uint tokenId = idToJobItem[itemId].tokenId;
 

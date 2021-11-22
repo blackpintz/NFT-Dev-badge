@@ -21,16 +21,18 @@ describe("Job", function () {
 
     const [_, geAddress, workerAddress] = await ethers.getSigners()
     await deployedJob.createJobItem(1, nftContractAddress, rewardPrice)
-    // await deployedJob.createJobItem(2, nftContractAddress, rewardPrice)
-     await deployedJob.connect(workerAddress).createJobSubmitted(1, "github.com")
-    // await deployedJob.markJobItemComplete(2)
-    await deployedJob.transferRewardsAndNft(1,nftContractAddress,1, {value: rewardPrice})
+    await deployedJob.createJobItem(2, nftContractAddress, rewardPrice)
+    await deployedJob.connect(workerAddress).createJobSubmitted(2, "github.com")
+    await deployedJob.connect(workerAddress).createJobSubmitted(1, "github.com")
+    await deployedJob.transferRewardsAndNft(1,nftContractAddress,2, {value: rewardPrice})
 
     const jobsPosted = await deployedJob.fetchJobItems()
     const jobsSubmitted = await deployedJob.fetchJobsSubmitted()
     const jobsApproved = await deployedJob.fetchJobsApproved()
 
-    console.log('jobs', jobsApproved[0])
+    console.log('jobs posted', jobsPosted)
+    // console.log('jobs submitted', jobsSubmitted)
+    console.log('jobs submitted', jobsApproved)
     
 
   });
