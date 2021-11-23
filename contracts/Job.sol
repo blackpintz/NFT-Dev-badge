@@ -19,10 +19,9 @@ contract Job is ReentrancyGuard {
 
     struct JobItem {
         uint jobId;
-        uint tokenId;
         address nftContract;
-        uint reward;
         address assignmentHolder;
+        uint reward;
         bool complete;
         bool approve;
     }
@@ -31,7 +30,6 @@ contract Job is ReentrancyGuard {
         uint submissionId;
         uint jobId;
         address assignmentTaker;
-        uint tokenId;
         string gitUrl;
     }
 
@@ -40,10 +38,9 @@ contract Job is ReentrancyGuard {
 
     event JobItemCreated (
         uint indexed jobId,
-        uint indexed tokenId,
         address indexed nftContract,
+        address indexed assignmentHolder,
         uint reward,
-        address assignmentHolder,
         bool complete,
         bool approve
     );
@@ -52,32 +49,29 @@ contract Job is ReentrancyGuard {
         uint indexed submissionId,
         uint indexed jobId,
         address indexed assignmentTaker,
-        uint tokenId,
         string gitUrl
     );
 
-    function createJobItem(uint tokenId, address nftContract, uint reward) public payable nonReentrant {
+    function createJobItem(address nftContract, uint reward) public payable nonReentrant {
         require(reward > 0, 'Reward of this job must be atleast 1 wei');
         _jobIds.increment();
         uint jobId = _jobIds.current();
         idToJobItem[jobId] = JobItem(
             jobId,
-            tokenId,
             nftContract,
-            reward,
             payable(msg.sender),
+            reward,
             false,
             false
         );
 
-         IERC721(nftContract).transferFrom(msg.sender, address(this), tokenId);
+        //  IERC721(nftContract).transferFrom(msg.sender, address(this), tokenId);
 
         emit JobItemCreated(
             jobId,
-            tokenId,
             nftContract,
-            reward,
             msg.sender,
+            reward,
             false,
             false
         );
@@ -91,7 +85,6 @@ contract Job is ReentrancyGuard {
             submissionId,
             itemId,
             payable(msg.sender),
-            idToJobItem[itemId].tokenId,
             url
         );
 
@@ -99,20 +92,17 @@ contract Job is ReentrancyGuard {
             submissionId,
             itemId,
             msg.sender,
-            idToJobItem[itemId].tokenId,
             url
         );
     }
 
-    function transferRewardsAndNft(uint itemId, address nftContract, uint submissionId) public payable nonReentrant {
+    function transferRewardsAndNft(uint itemId, address nftContract, uint submissionId, uint tokenId) public payable nonReentrant {
         require(idToJobItem[itemId].complete == true, "The job is marked as incomplete");
         require(msg.value == idToJobItem[itemId].reward, "You do not have enough money to make this transaction.");
         require(idToJobSubmitted[submissionId].jobId == itemId, "JobId does not match.");
 
-        uint tokenId = idToJobItem[itemId].tokenId;
-
         payable(idToJobSubmitted[submissionId].assignmentTaker).transfer(msg.value);
-        IERC721(nftContract).transferFrom(address(this), idToJobSubmitted[submissionId].assignmentTaker, tokenId);
+        IERC721(nftContract).transferFrom(idToJobItem[itemId].assignmentHolder, idToJobSubmitted[submissionId].assignmentTaker, tokenId);
         idToJobItem[itemId].approve = true;
     }
 
@@ -134,6 +124,9 @@ contract Job is ReentrancyGuard {
 
          return jobs;
     }
+
+    // fetchJobItemById
+    // fetchJobSubmittedById
 
     function fetchJobsSubmitted() public view returns(JobSubmitted[] memory) {
         uint totalJobCount = _jobsCompleted.current();
