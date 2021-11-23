@@ -31,6 +31,7 @@ contract Job is ReentrancyGuard {
         uint submissionId;
         uint jobId;
         address assignmentTaker;
+        uint tokenId;
         string gitUrl;
     }
 
@@ -51,6 +52,7 @@ contract Job is ReentrancyGuard {
         uint indexed submissionId,
         uint indexed jobId,
         address indexed assignmentTaker,
+        uint tokenId,
         string gitUrl
     );
 
@@ -89,6 +91,7 @@ contract Job is ReentrancyGuard {
             submissionId,
             itemId,
             payable(msg.sender),
+            idToJobItem[itemId].tokenId,
             url
         );
 
@@ -96,6 +99,7 @@ contract Job is ReentrancyGuard {
             submissionId,
             itemId,
             msg.sender,
+            idToJobItem[itemId].tokenId,
             url
         );
     }

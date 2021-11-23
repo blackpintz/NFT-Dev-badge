@@ -19,6 +19,8 @@ describe("Job", function () {
    await nft.createToken("https://www.mytokenlocation.com")
    await nft.createToken("https://www.mytokenlocation2.com ")
 
+  
+
     const [_, geAddress, workerAddress] = await ethers.getSigners()
     await deployedJob.createJobItem(1, nftContractAddress, rewardPrice)
     await deployedJob.createJobItem(2, nftContractAddress, rewardPrice)
@@ -30,10 +32,9 @@ describe("Job", function () {
     const jobsSubmitted = await deployedJob.fetchJobsSubmitted()
     const jobsApproved = await deployedJob.fetchJobsApproved()
 
-    console.log('jobs posted', jobsPosted)
+    // console.log('jobs posted', jobsPosted)
     // console.log('jobs submitted', jobsSubmitted)
     console.log('jobs submitted', jobsApproved)
-    
 
   });
 });
