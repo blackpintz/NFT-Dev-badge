@@ -15,6 +15,12 @@ describe("Job", function () {
     const nftContractAddress = nft.address
 
     const rewardPrice = ethers.utils.parseUnits('100', 'ether')
+    const title1 = "first job"
+    const deadline1 = "Dec 1st"
+    const description1 = "Description of first job"
+    const category1 = "security"
+
+
 
    await nft.createToken("https://www.mytokenlocation.com")
    await nft.createToken("https://www.mytokenlocation2.com ")
@@ -22,8 +28,8 @@ describe("Job", function () {
   
 
     const [_, geAddress, workerAddress] = await ethers.getSigners()
-    await deployedJob.createJobItem(nftContractAddress, rewardPrice)
-    await deployedJob.createJobItem(nftContractAddress, rewardPrice)
+    await deployedJob.createJobItem(nftContractAddress, title1, rewardPrice, deadline1, description1, category1)
+    await deployedJob.createJobItem(nftContractAddress, title1, rewardPrice, deadline1, description1, category1)
     await deployedJob.connect(workerAddress).createJobSubmitted(2, "github.com")
     await deployedJob.connect(workerAddress).createJobSubmitted(1, "github.com")
     await deployedJob.transferRewardsAndNft(1,nftContractAddress,2, 1, {value: rewardPrice})

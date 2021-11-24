@@ -23,20 +23,19 @@ export default function JobPosts() {
         const data = await jobContract.fetchJobItems()
 
         const items = await Promise.all(data.map(async i => {
-            const tokenUri = await tokenContract.tokenURI(i.tokenId)
-            const meta = await axios.get(tokenUri)
+
             let reward = ethers.utils.formatUnits(i.reward.toString(), 'ether')
             let item = {
                 reward,
-                tokenId: i.tokenId.toNumber(),
                 assignmentHolder: i.assignmentHolder,
-                title: meta.data.title,
-                deadline: meta.data.deadline,
-                description: meta.data.description,
-                category: meta.data.category
+                title: i.title,
+                deadline: i.deadline,
+                description: i.description,
+                category: i.category
             }
             return item
         }))
+        console.log(items)
         setJobs(items)
     }
 

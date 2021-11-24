@@ -21,6 +21,10 @@ contract Job is ReentrancyGuard {
         uint jobId;
         address nftContract;
         address assignmentHolder;
+        string title;
+        string deadline;
+        string description;
+        string category;
         uint reward;
         bool complete;
         bool approve;
@@ -40,6 +44,10 @@ contract Job is ReentrancyGuard {
         uint indexed jobId,
         address indexed nftContract,
         address indexed assignmentHolder,
+        string title,
+        string deadline,
+        string description,
+        string category,
         uint reward,
         bool complete,
         bool approve
@@ -52,7 +60,7 @@ contract Job is ReentrancyGuard {
         string gitUrl
     );
 
-    function createJobItem(address nftContract, uint reward) public payable nonReentrant {
+    function createJobItem(address nftContract, string memory title, uint reward, string memory deadline, string memory description, string memory category  ) public payable nonReentrant {
         require(reward > 0, 'Reward of this job must be atleast 1 wei');
         _jobIds.increment();
         uint jobId = _jobIds.current();
@@ -60,6 +68,10 @@ contract Job is ReentrancyGuard {
             jobId,
             nftContract,
             payable(msg.sender),
+            title,
+            deadline,
+            description,
+            category,
             reward,
             false,
             false
@@ -71,6 +83,10 @@ contract Job is ReentrancyGuard {
             jobId,
             nftContract,
             msg.sender,
+            title,
+            deadline,
+            description,
+            category,
             reward,
             false,
             false
