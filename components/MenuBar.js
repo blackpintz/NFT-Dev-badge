@@ -20,6 +20,9 @@ export default function MenuBar() {
             <Link href="/">
                 <h4>Home</h4>
             </Link>
+            <Link href="/create-job">
+                <h4>Add Job Post</h4>
+            </Link>
             <Link href="/job_posts">
                 <h4>Job Posts</h4>
             </Link>
