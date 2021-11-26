@@ -11,9 +11,8 @@ const useStyles = makeStyles({
     }
 })
 
-import { nftaddress, jobPostAddress } from '../config';
+import { jobPostAddress } from '../config';
 
-import NFT from '../artifacts/contracts/NFT.sol/NFT.json';
 import Job from '../artifacts/contracts/Job.sol/Job.json';
 
 export default function JobPosts() {
@@ -26,7 +25,6 @@ export default function JobPosts() {
 
     async function loadJobs() {
         const provider = new ethers.providers.JsonRpcProvider()
-        const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
         const jobContract = new ethers.Contract(jobPostAddress, Job.abi, provider)
         const data = await jobContract.fetchJobItems()
 
@@ -39,7 +37,8 @@ export default function JobPosts() {
                 title: i.title,
                 deadline: i.deadline,
                 description: i.description,
-                category: i.category
+                category: i.category,
+                id: i.jobId.toNumber()
             }
             return item
         }))

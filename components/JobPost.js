@@ -1,6 +1,15 @@
 
-import {Paper, Button} from '@mui/material';
+import { useState } from 'react';
+import Web3Modal from 'web3modal';
+import {ethers} from 'ethers';
+import {Paper, Button, TextField, Dialog, 
+    DialogActions, DialogContent, DialogTitle} from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import {useRouter} from 'next/router';
+
+import { jobPostAddress } from '../config'
+
+import Job from '../artifacts/contracts/Job.sol/Job.json';
 
 const useStyles = makeStyles({
     paper: {
@@ -11,7 +20,34 @@ const useStyles = makeStyles({
 
 export default function JobPost(props) {
     const classes = useStyles();
-    const {reward, assignmentHolder, title, deadline, description, category} = props.job
+    const {reward, assignmentHolder, title, deadline, description, category, id} = props.job
+    const [open, setOpen] = useState(false)
+    const [url, setUrl] = useState('')
+    const router = useRouter()
+
+    async function submitJob(_id, _url) {
+        const web3Modal = new Web3Modal()
+        const connection = await web3Modal.connect()
+        const provider = new ethers.providers.Web3Provider(connection)
+        const signer = provider.getSigner()
+
+        let contract = new ethers.Contract(jobPostAddress, Job.abi, signer)
+        let jobContract = await contract.createJobSubmitted(_id, _url)
+        await jobContract.wait();
+        setUrl('')
+        setOpen(false)
+        router.push('/jobs_pending_approval')
+    }
+
+    const handleClick = () => {
+       setOpen(true);
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+
     return (
         <Paper className={classes.paper} elevation={3}>
             <h4>{title}</h4>
@@ -20,7 +56,27 @@ export default function JobPost(props) {
             <p>{description}</p>
             <h5>Expected Salary: {reward} ETH</h5>
             <h5>Job deadline: {deadline}</h5>
-            <Button variant="contained" color="success">Submit Job</Button>
+            <Button variant="contained" color="success" onClick={handleClick}>Submit Job</Button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Submit git url:</DialogTitle>
+                <DialogContent>
+                    <TextField 
+                    variant="outlined"
+                    placeholder='git-url'
+                    required
+                    value={url}
+                    onChange={(e) =>{setUrl(e.target.value)}}
+                    />
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={handleClose} variant="contained" color="secondary">Cancel</Button>
+                    <Button 
+                    variant='contained' 
+                    color="success"
+                    onClick={() => submitJob(id, url)}
+                    >Submit</Button>
+                </DialogActions>
+            </Dialog>
         </Paper>
     )
 }

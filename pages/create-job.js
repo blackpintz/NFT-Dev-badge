@@ -36,7 +36,7 @@ export default function CreateJob() {
 
         let contract = new ethers.Contract(jobPostAddress, Job.abi, signer)
         let jobContract = await contract.createJobItem(nftaddress, title, rewardInEth , deadline, description, category)
-        let tx = await jobContract.wait()
+        await jobContract.wait()
         router.push('/')
     }
 
