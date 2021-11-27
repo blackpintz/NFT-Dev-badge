@@ -2,7 +2,7 @@ import {ethers} from 'ethers';
 import { useEffect, useState } from 'react';
 import {Grid} from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import JobSubmitted from '../components/JobSubmitted';
+import JobSubmitted from '../components/JobSubmitted'
 
 import { jobPostAddress } from '../config';
 

@@ -12,6 +12,10 @@ describe("Job", function () {
     const nft = await NFT.deploy(jobPostAddress)
     await nft.deployed()
 
+    const Metadata = await ethers.getContractFactory("MetaData")
+    const metadata = await Metadata.deploy()
+    await metadata.deployed()
+
     const nftContractAddress = nft.address
 
     const rewardPrice = ethers.utils.parseUnits('100', 'ether')
@@ -38,10 +42,12 @@ describe("Job", function () {
     const jobsSubmitted = await deployedJob.fetchJobsSubmitted()
     const jobsApproved = await deployedJob.fetchJobsApproved()
 
+    const hashValue = await metadata.hash(2, "github.com", '0x8462eb2fbcef5aa4861266f59ad5f47b9aa6525d767d713920fdbdfb6b0c0b78')
+
 
     // console.log('jobs posted', jobsPosted)
     // console.log('jobs submitted', jobsSubmitted)
-    console.log('jobs submitted', jobsApproved)
+    console.log('hashvalue', hashValue)
     
 
   });

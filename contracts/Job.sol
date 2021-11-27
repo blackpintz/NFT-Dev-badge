@@ -37,8 +37,15 @@ contract Job is ReentrancyGuard {
         string gitUrl;
     }
 
+    struct NFToken {
+        uint tokenId;
+        string attribute;
+        string category;
+    }
+
     mapping(uint => JobItem) private idToJobItem;
     mapping(uint => JobSubmitted) private idToJobSubmitted;
+    mapping(uint => NFToken) private idToNFToken;
 
     event JobItemCreated (
         uint indexed jobId,
