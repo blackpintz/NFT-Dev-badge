@@ -33,7 +33,8 @@ export default function JobsPendingApproval() {
                 jobId: i.jobId.toNumber(),
                 submissionId: i.submissionId.toNumber(),
                 assignmentTaker: i.assignmentTaker,
-                url: i.gitUrl
+                url: i.gitUrl,
+                reward: i.reward
             }
             return item
         }))

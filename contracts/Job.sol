@@ -35,17 +35,12 @@ contract Job is ReentrancyGuard {
         uint jobId;
         address assignmentTaker;
         string gitUrl;
+        uint reward;
     }
 
-    struct NFToken {
-        uint tokenId;
-        string attribute;
-        string category;
-    }
 
     mapping(uint => JobItem) private idToJobItem;
     mapping(uint => JobSubmitted) private idToJobSubmitted;
-    mapping(uint => NFToken) private idToNFToken;
 
     event JobItemCreated (
         uint indexed jobId,
@@ -64,7 +59,8 @@ contract Job is ReentrancyGuard {
         uint indexed submissionId,
         uint indexed jobId,
         address indexed assignmentTaker,
-        string gitUrl
+        string gitUrl,
+        uint reward
     );
 
     function createJobItem(address nftContract, string memory title, uint reward, string memory deadline, string memory description, string memory category  ) public payable nonReentrant {
@@ -108,14 +104,16 @@ contract Job is ReentrancyGuard {
             submissionId,
             itemId,
             payable(msg.sender),
-            url
+            url,
+            idToJobItem[itemId].reward
         );
 
         emit JobItemSubmitted(
             submissionId,
             itemId,
             msg.sender,
-            url
+            url,
+            idToJobItem[itemId].reward
         );
     }
 
@@ -148,8 +146,6 @@ contract Job is ReentrancyGuard {
          return jobs;
     }
 
-    // fetchJobItemById
-    // fetchJobSubmittedById
 
     function fetchJobsSubmitted() public view returns(JobSubmitted[] memory) {
         uint totalJobCount = _jobsCompleted.current();

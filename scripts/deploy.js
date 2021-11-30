@@ -14,6 +14,12 @@ async function main() {
 
   console.log("NFT deployed to:", nft.address);
 
+  const MetaData = await hre.ethers.getContractFactory("MetaData")
+  const metadata = await MetaData.deploy()
+  await metadata.deployed();
+
+  console.log("MetaData deployed to:", metadata.address);
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere
