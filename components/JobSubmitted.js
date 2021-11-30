@@ -28,7 +28,7 @@ export default function JobSubmitted(props) {
     const classes = useStyles();
     const router = useRouter();
     const {job} = props
-    const {jobId, submissionId, assignmentTaker, url, reward} = props.job
+    const {jobId, submissionId, assignmentTaker, url, reward, tokenId} = props.job
 
     async function createNft() {
         const web3Modal = new Web3Modal()

@@ -45,20 +45,20 @@ describe("Job", function () {
     await deployedJob.createJobItem(nftContractAddress, title1, rewardPrice, deadline1, description1, category1)
     await deployedJob.createJobItem(nftContractAddress, title1, rewardPrice, deadline1, description1, category1)
     await deployedJob.connect(workerAddress).createJobSubmitted(2, "github.com")
-    // await deployedJob.connect(workerAddress).createJobSubmitted(1, "github.com")
-    // await deployedJob.transferRewardsAndNft(1,nftContractAddress,2, 1, {value: rewardPrice})
+    await deployedJob.connect(workerAddress).createJobSubmitted(1, "github.com")
+    await deployedJob.transferRewardsAndNft(1,nftContractAddress,2, 1, {value: rewardPrice})
 
     const jobsPosted = await deployedJob.fetchJobItems()
     const jobsSubmitted = await deployedJob.fetchJobsSubmitted()
     // await deployedJob.DisApproveJob(2, 1)
-    // const jobsApproved = await deployedJob.fetchJobsApproved()
-    const owner = await nft.ownerOf(tokenId1)
+    const jobsApproved = await deployedJob.fetchJobsApproved()
 
     // const hashValue = await metadata.hash(2, "github.com", '0x8462eb2fbcef5aa4861266f59ad5f47b9aa6525d767d713920fdbdfb6b0c0b78')
 
 
     // console.log('jobs posted', jobsPosted)
-    console.log('jobs submitted', jobsSubmitted)
+    // console.log('jobs submitted', jobsSubmitted)
+    console.log('jobs approved', jobsApproved[0].tokenId.toNumber())
     // console.log('hashvalue', hashValue)
     // console.log(resTx)
     // console.log(workerAddress)
