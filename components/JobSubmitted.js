@@ -69,13 +69,13 @@ export default function JobSubmitted(props) {
 
     }
 
+
     return (
         <Paper className={classes.paper} elevation={3}>
             <h5>Job Id: {jobId}</h5>
             <h5>Submission Id: {submissionId}</h5>
             <h5>Git Url: {url}</h5>
             <Box sx={{display:"flex"}}>
-                <Button className={classes.button} variant="contained" color="primary">Decline</Button>
                 <Button
                 onClick={createNft}
                 className={classes.button} 

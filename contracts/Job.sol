@@ -1,6 +1,6 @@
 //SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.4;
+pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
@@ -27,7 +27,6 @@ contract Job is ReentrancyGuard {
         string category;
         uint reward;
         bool complete;
-        bool approve;
     }
 
     struct JobSubmitted {
@@ -36,6 +35,7 @@ contract Job is ReentrancyGuard {
         address assignmentTaker;
         string gitUrl;
         uint reward;
+        bool approve;
     }
 
 
@@ -51,8 +51,7 @@ contract Job is ReentrancyGuard {
         string description,
         string category,
         uint reward,
-        bool complete,
-        bool approve
+        bool complete
     );
 
     event JobItemSubmitted (
@@ -60,7 +59,8 @@ contract Job is ReentrancyGuard {
         uint indexed jobId,
         address indexed assignmentTaker,
         string gitUrl,
-        uint reward
+        uint reward,
+        bool approve
     );
 
     function createJobItem(address nftContract, string memory title, uint reward, string memory deadline, string memory description, string memory category  ) public payable nonReentrant {
@@ -76,11 +76,9 @@ contract Job is ReentrancyGuard {
             description,
             category,
             reward,
-            false,
             false
         );
 
-        //  IERC721(nftContract).transferFrom(msg.sender, address(this), tokenId);
 
         emit JobItemCreated(
             jobId,
@@ -91,7 +89,6 @@ contract Job is ReentrancyGuard {
             description,
             category,
             reward,
-            false,
             false
         );
     }
@@ -105,7 +102,8 @@ contract Job is ReentrancyGuard {
             itemId,
             payable(msg.sender),
             url,
-            idToJobItem[itemId].reward
+            idToJobItem[itemId].reward,
+            false
         );
 
         emit JobItemSubmitted(
@@ -113,7 +111,8 @@ contract Job is ReentrancyGuard {
             itemId,
             msg.sender,
             url,
-            idToJobItem[itemId].reward
+            idToJobItem[itemId].reward,
+            false
         );
     }
 
@@ -124,7 +123,12 @@ contract Job is ReentrancyGuard {
 
         payable(idToJobSubmitted[submissionId].assignmentTaker).transfer(msg.value);
         IERC721(nftContract).transferFrom(idToJobItem[itemId].assignmentHolder, idToJobSubmitted[submissionId].assignmentTaker, tokenId);
-        idToJobItem[itemId].approve = true;
+        idToJobSubmitted[submissionId].approve = true;
+    }
+
+    function DisApproveJob (uint itemId, uint submissionId) public {
+        idToJobItem[itemId].complete = false;
+        delete idToJobSubmitted[submissionId];
     }
 
 
@@ -149,41 +153,50 @@ contract Job is ReentrancyGuard {
 
     function fetchJobsSubmitted() public view returns(JobSubmitted[] memory) {
         uint totalJobCount = _jobsCompleted.current();
+        uint itemCount = 0;
         uint currentIndex = 0;
 
-        JobSubmitted[] memory jobs = new JobSubmitted[](totalJobCount);
+        for(uint i = 0; i < totalJobCount; i++) {
+            if(idToJobSubmitted[i+1].approve == false) {
+                itemCount += 1;
+            }
+        }
+
+        JobSubmitted[] memory jobs = new JobSubmitted[](itemCount);
 
         for (uint i = 0; i < totalJobCount; i++) {
+            if(idToJobSubmitted[i+1].approve == false) {
                 uint currentId = idToJobSubmitted[i+1].submissionId;
                 JobSubmitted storage currentItem = idToJobSubmitted[currentId];
                 jobs[currentIndex] = currentItem;
                 currentIndex += 1;
-        }
-        return jobs;
-    }
-
-    function fetchJobsApproved() public view returns (JobItem[] memory) {
-        uint totalJobCount = _jobIds.current();
-        uint jobCount = 0;
-        uint currentIndex = 0;
-
-        for(uint i = 0; i < totalJobCount; i++) {
-            // have to change the approve type
-            if(idToJobItem[i+1].approve == true) {
-                jobCount += 1;
-            }
-        }
-
-        JobItem[] memory jobs = new JobItem[](jobCount);
-
-        for(uint i = 0; i < totalJobCount; i++) {
-            if(idToJobItem[i+1].approve == true) {
-                uint currentId = idToJobItem[i+1].jobId;
-                JobItem storage currentItem = idToJobItem[currentId];
-                jobs[currentIndex] = currentItem;
-                currentIndex += 1;
             }
         }
         return jobs;
     }
+
+    // function fetchJobsApproved() public view returns (JobItem[] memory) {
+    //     uint totalJobCount = _jobIds.current();
+    //     uint jobCount = 0;
+    //     uint currentIndex = 0;
+
+    //     for(uint i = 0; i < totalJobCount; i++) {
+    //         // have to change the approve type
+    //         if(idToJobItem[i+1].approve == true) {
+    //             jobCount += 1;
+    //         }
+    //     }
+
+    //     JobItem[] memory jobs = new JobItem[](jobCount);
+
+    //     for(uint i = 0; i < totalJobCount; i++) {
+    //         if(idToJobItem[i+1].approve == true) {
+    //             uint currentId = idToJobItem[i+1].jobId;
+    //             JobItem storage currentItem = idToJobItem[currentId];
+    //             jobs[currentIndex] = currentItem;
+    //             currentIndex += 1;
+    //         }
+    //     }
+    //     return jobs;
+    // }
 }
