@@ -1,12 +1,11 @@
-import Typography from '@mui/material/Typography';
+import {Typography, Box} from '@mui/material';
 
 export default function Home() {
   return (
-    <div>
-      <h3>Hello there!</h3>
+    <Box>
       <Typography variant="h4" component="h1">
         Welcome to BlockchainS
       </Typography>
-    </div>
+    </Box>
   )
 }

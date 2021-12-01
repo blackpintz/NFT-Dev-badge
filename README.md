@@ -1,46 +1,39 @@
-## Overview
+## NFT Badge Viewer.
 
-Award contributors with badges for completed assignments, optionally with additional rewards.
-Since badges are tradeable, the future rewards for assignments may be sold on and reimbursed by someone else.
+### Short description
 
-## Workflow
+User A can post a job assignment on the app. User B can claim the job and send a link with the completed assignment. When User A confirms the work is completed, they will approve and user B will receive the payment for the assignment and an NFT. 
 
-The assignment giver adds an assignment to the job contract.
-Zero or more reward tokens may be added to the assignment.
-The assignment state and reward is locked, and an NFT is minted to the assignment taker.
-The NFT token id is stored within the job contract assignment.
-(Here the assignment taker may trade on the NFT. Let's call the entity finishing the assignment the "assignment holder.")
+## Built With
 
-## Case A
+- Solidity
 
-The assignment giver unlocks the reward when the assignment is complete. 
-<!-- a reward could be money that is send to the assignment taker. -->
-The assignment holder triggers job contract, which checks that the assignment holder is the (current) holder of the NFT
-If yes, rewards are unlocked for the assignment finisher for the assignment.
-Assignment finisher may transfer rewards from the job contract.
+- Nextjs
 
-## Case B
+- Ethersjs
 
-The assignment holder relinquishes the assignment
-The rewards are unlocked for the assignment giver's reallocation.
+- Hardhat
 
-## Job contract data structure
+## Live Demo
 
-Every job generates a unique ID, and mints one or more NFTs against rewards locked in by the job contract.
+## Getting Started
 
-## Description
+## Prerequisites
 
-Describes what is to be created and under which conditions the reward will be unlocked.
+- Install node.
 
-## Date Due
+## Set up
 
-A simple UTC datetime specifying when the work is due. This has no practical effect in the state of the contract.
+1. Clone the project.
 
-## Salt
+2. Cd into the project directory.
 
-A quasi-random number generated from the block hash and an internal serial number, to make it harder for the job id hash to be pre-determined
+3. Run ```npm install```
 
-## Rewards
+4. Create a ```.env``` file and paste your ```PRIVATE_KEY``` and ```PROJECT_ID```(project id from infura project).
 
-A list of balances of one or more tokens, fungible or not, that have been sent to the contract.
-The contract needs to lock balances plegded to a specific assignment.
+5. Create a ```config.js``` file in the root directory and paste the following addresses after running ``` npx hardhat run .\scripts\deploy.js ---network (e.g rinkeby)```: ```nftaddress, jobPostAddress, metaAddress```. Remember to export them.
+
+6. If you are using a local testnet, open another terminal and run ```npx hardhat node```. Do this before step 5.
+
+7. Run ```npm run dev``` to open the app on localhost.

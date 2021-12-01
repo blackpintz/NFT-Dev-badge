@@ -1,5 +1,6 @@
 import {ethers} from 'ethers';
 import { useEffect, useState } from 'react';
+import Web3Modal from 'web3modal';
 import axios from 'axios'
 import {Grid, Box} from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -33,7 +34,9 @@ export default function JobsApproved() {
     }, [])
 
     async function loadJobs() {
-        const provider = new ethers.providers.JsonRpcProvider()
+        const web3Modal = new Web3Modal()
+        const connection = await web3Modal.connect()
+        const provider = new ethers.providers.Web3Provider(connection)
         let tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
         const jobContract = new ethers.Contract(jobPostAddress, Job.abi, provider)
         const data = await jobContract.fetchJobsApproved()
@@ -41,7 +44,6 @@ export default function JobsApproved() {
         const jobs = await Promise.all(data.map(async i => {
             const tokenUri = await tokenContract.tokenURI(i.tokenId)
             const meta = await axios.get(tokenUri)
-            console.log(meta)
             let job = {
                 attribute: meta.data.attribute,
                 title: i.title,
@@ -58,6 +60,7 @@ export default function JobsApproved() {
         <>
         <Box className={classes.box}>
             <h3>NFTs</h3>
+            <h5>---Refresh page after 30 seconds if the NFT doesn't display immediately---</h5>
         </Box>
         {!jobs.length ? (
             <Box className={classes.box}>

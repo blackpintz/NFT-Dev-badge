@@ -1,5 +1,6 @@
 import {ethers} from 'ethers';
 import { useEffect, useState } from 'react';
+import Web3Modal from 'web3modal';
 import {Grid} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import JobPost from '../components/JobPost';
@@ -24,7 +25,9 @@ export default function JobPosts() {
     },[])
 
     async function loadJobs() {
-        const provider = new ethers.providers.JsonRpcProvider()
+        const web3Modal = new Web3Modal()
+        const connection = await web3Modal.connect()
+        const provider = new ethers.providers.Web3Provider(connection)
         const jobContract = new ethers.Contract(jobPostAddress, Job.abi, provider)
         const data = await jobContract.fetchJobItems()
 

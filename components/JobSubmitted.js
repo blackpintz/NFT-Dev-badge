@@ -16,7 +16,7 @@ import Metadata from '../artifacts/contracts/MetaData.sol/MetaData.json';
 
 const useStyles = makeStyles({
     paper: {
-        height: "200px",
+        height: "270px",
         padding: "0.2rem 0.4rem"
     },
     button: {
@@ -85,6 +85,7 @@ export default function JobSubmitted(props) {
                 Approve
                 </Button>
             </Box>
+            <h5>--- Please give the transactions sometime to process after you press approve button ---</h5>
         </Paper>
     )
 }
