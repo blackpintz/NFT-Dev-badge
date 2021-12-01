@@ -29,8 +29,8 @@ export default function MenuBar() {
             <Link href="/jobs_pending_approval">
                 <h4>Jobs Pending Approval</h4>
             </Link>
-            <Link href="/jobs_approved">
-                <h4>Jobs Approved</h4>
+            <Link href="/nfts_awarded">
+                <h4>NFTs</h4>
             </Link>
         </Box>
         <Divider variant="middle" />

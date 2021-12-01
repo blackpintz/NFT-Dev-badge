@@ -63,7 +63,7 @@ export default function JobSubmitted(props) {
             const added = await client.add(data)
             const tokenUrl = `https://ipfs.infura.io/ipfs/${added.path}`
             await tokenContract.setTokenURI(tokenId, tokenUrl)
-            router.push('/jobs_approved')
+            router.push('/nfts_awarded')
         } catch (e) {
             console.log('Error uploading file: ', e)
         }

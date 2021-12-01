@@ -1,7 +1,7 @@
 import {ethers} from 'ethers';
 import { useEffect, useState } from 'react';
 import axios from 'axios'
-import {Grid} from '@mui/material';
+import {Grid, Box} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import JobApproved from '../components/JobApproved';
 
@@ -17,6 +17,10 @@ const useStyles = makeStyles({
         backgroundColor: '#ffe4e1',
         minHeight: "500px",
         padding: "0 0.5rem"
+    },
+    box: {
+        width: "95%",
+        margin: "0.4rem auto"
     }
 })
 
@@ -52,8 +56,13 @@ export default function JobsApproved() {
 
     return(
         <>
+        <Box className={classes.box}>
+            <h3>NFTs</h3>
+        </Box>
         {!jobs.length ? (
-            <h3>No Jobs Approved!</h3>
+            <Box className={classes.box}>
+                <h3>No NFTs awarded.</h3>
+            </Box>
         ) : (
             <>
             <Grid className={classes.grid} container spacing={2}>
