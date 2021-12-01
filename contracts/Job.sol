@@ -98,6 +98,7 @@ contract Job is ReentrancyGuard {
     }
 
     function createJobSubmitted(uint itemId,string memory url) public payable nonReentrant  {
+        require(msg.sender != idToJobItem[itemId].assignmentHolder, "Job creator cannot be job submitter.");
         idToJobItem[itemId].complete = true;
         _jobsCompleted.increment();
         uint submissionId = _jobsCompleted.current();
@@ -121,6 +122,7 @@ contract Job is ReentrancyGuard {
     }
 
     function transferRewardsAndNft(uint itemId, address nftContract, uint submissionId, uint tokenId) public payable nonReentrant {
+        require(msg.sender != idToJobSubmitted[submissionId].assignmentTaker, "A job Submitter cannot approve.");
         require(idToJobItem[itemId].complete == true, "The job is marked as incomplete");
         require(msg.value == idToJobItem[itemId].reward, "You do not have enough money to make this transaction.");
         require(idToJobSubmitted[submissionId].jobId == itemId, "JobId does not match.");
