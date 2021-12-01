@@ -1,68 +1,52 @@
-const { expect } = require("chai");
+const { expect, assert } = require("chai");
 const { ethers } = require("hardhat");
 const axios = require('axios')
+require('chai')
+    .use(require('chai-as-promised'))
+    .should()
 
-describe("Job", function () {
-  it("Should create a job and transfer NFT", async function () {
+describe("Test All contracts", function() {
+  let deployedJob;
+  let nft;
+  let metadata;
+  let token;
+  let tokenId
+
+  beforeEach(async function () {
     const Job = await ethers.getContractFactory("Job")
-    const deployedJob = await Job.deploy()
+    deployedJob = await Job.deploy();
     await deployedJob.deployed()
     const jobPostAddress = deployedJob.address
 
     const NFT = await ethers.getContractFactory("NFT")
-    const nft = await NFT.deploy(jobPostAddress)
+    nft = await NFT.deploy(jobPostAddress)
     await nft.deployed()
 
     const Metadata = await ethers.getContractFactory("MetaData")
-    const metadata = await Metadata.deploy()
+    metadata = await Metadata.deploy()
     await metadata.deployed()
 
-    const nftContractAddress = nft.address
+    token =  await nft.createToken()
+    let tx = await token.wait()
+    const event = tx.events[0]
+    tokenId = event.args[2].toNumber()
+  })
 
-    const rewardPrice = ethers.utils.parseUnits('100', 'ether')
-    const title1 = "first job"
-    const deadline1 = "Dec 1st"
-    const description1 = "Description of first job"
-    const category1 = "security"
+  describe("NFT contract functions", function () {
+    it("should create a token", async function () {
+      let tx = await token.wait()
+      const event = tx.events[0]
+      assert.equal(tokenId, 1, 'id is correct')
+      assert.equal(event.args[0], '0x0000000000000000000000000000000000000000', 'from is correct')
+      assert.equal(event.args[1], '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', 'to is correct')
+    })
 
-
-
-   const token1 = await nft.createToken()
-   let tx = await token1.wait()
-   const event = tx.events[0]
-   const hash = event.blockHash
-   const value = event.args[2]
-   const tokenId1 = value.toNumber()
-   await nft.setTokenURI(tokenId1, "www.mytokenlocation.com")
-
-   const uri = await nft.tokenURI(tokenId1)
-  //  const meta = await axios.get(uri)
-   const token2 = await nft.createToken()
-
-  
-
-    const [_, geAddress, workerAddress] = await ethers.getSigners()
-    await deployedJob.createJobItem(nftContractAddress, title1, rewardPrice, deadline1, description1, category1)
-    await deployedJob.createJobItem(nftContractAddress, title1, rewardPrice, deadline1, description1, category1)
-    await deployedJob.connect(workerAddress).createJobSubmitted(2, "github.com")
-    await deployedJob.connect(workerAddress).createJobSubmitted(1, "github.com")
-    await deployedJob.transferRewardsAndNft(1,nftContractAddress,2, 1, {value: rewardPrice})
-
-    const jobsPosted = await deployedJob.fetchJobItems()
-    const jobsSubmitted = await deployedJob.fetchJobsSubmitted()
-    // await deployedJob.DisApproveJob(2, 1)
-    const jobsApproved = await deployedJob.fetchJobsApproved()
-
-    // const hashValue = await metadata.hash(2, "github.com", '0x8462eb2fbcef5aa4861266f59ad5f47b9aa6525d767d713920fdbdfb6b0c0b78')
+    it('should set token uri', async function () {
+      await nft.setTokenURI(tokenId, "www.mytokenlocation.com")
+      const uri = await nft.tokenURI(tokenId)
+      assert.notEqual(uri, "www.mytokenlocation1.com")
+    })
+  })
 
 
-    // console.log('jobs posted', jobsPosted)
-    // console.log('jobs submitted', jobsSubmitted)
-    console.log('jobs approved', jobsApproved[0].tokenId.toNumber())
-    // console.log('hashvalue', hashValue)
-    // console.log(resTx)
-    // console.log(workerAddress)
-    // console.log(token2)
-
-  });
-});
+})
