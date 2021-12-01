@@ -12,8 +12,8 @@ import NFT from '../artifacts/contracts/NFT.sol/NFT.json';
 
 const useStyles = makeStyles({
     grid: {
-        width: "90%",
-        margin: "0 auto",
+        width: "95%",
+        margin: "0.5rem auto",
         backgroundColor: '#ffe4e1',
         minHeight: "500px",
         padding: "0 0.5rem"
