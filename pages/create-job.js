@@ -46,6 +46,7 @@ export default function CreateJob() {
             <div className={classes.form}>
                 <TextField 
                 label="Title" 
+                required
                 fullWidth 
                 variant="standard" 
                 onChange={e => updateFormInput({...formInput, title: e.target.value})}  />
@@ -61,7 +62,8 @@ export default function CreateJob() {
                 variant="standard" 
                 onChange={e => updateFormInput({...formInput, deadline: e.target.value})} />
                 <TextField 
-                label="Reward" 
+                label="Reward"
+                required 
                 fullWidth 
                 variant="standard" 
                 onChange={e => updateFormInput({...formInput, reward: e.target.value})} />
