@@ -16,6 +16,18 @@ User A can post a job assignment on the app. User B can claim the job and send a
 
 ## Live Demo
 
+https://winter-poetry-1710.on.fleek.co/
+
+## Video recording
+
+https://youtu.be/nMFhylYrIR8
+
+## Directory Structure
+
+- ```contract```: solidity contracts.
+- ```pages``` and ```components```: frontend files.
+- ```test```: test files
+
 ## Getting Started
 
 ## Prerequisites
@@ -36,4 +48,8 @@ User A can post a job assignment on the app. User B can claim the job and send a
 
 6. If you are using a local testnet, open another terminal and run ```npx hardhat node```. Do this before step 5.
 
-7. Run ```npm run dev``` to open the app on localhost.
+7. Run ```npm run dev``` to open the app on ```localhost:300```.
+
+## Tests
+
+Run ```npx hardhat test```.
