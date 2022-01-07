@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <Box>
       <Typography variant="h4" component="h1">
-        Welcome to BlockchainS
+        Welcome to NFT-badge-viewer.
       </Typography>
     </Box>
   )

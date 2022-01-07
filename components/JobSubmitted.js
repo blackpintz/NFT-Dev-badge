@@ -8,7 +8,7 @@ import { makeStyles } from '@mui/styles';
 
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 
-import { nftaddress, jobPostAddress, metaAddress } from "../config";
+import { nftaddress, jobPostAddress, metaAddress, keyAddress } from "../config";
 
 import NFT from '../artifacts/contracts/NFT.sol/NFT.json';
 import Job from '../artifacts/contracts/Job.sol/Job.json';
@@ -29,6 +29,7 @@ export default function JobSubmitted(props) {
     const router = useRouter();
     const {job} = props
     const {jobId, submissionId, assignmentTaker, url, reward, tokenId} = props.job
+    console.log(props.job)
 
     async function createNft() {
         const web3Modal = new Web3Modal()

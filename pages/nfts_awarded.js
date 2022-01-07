@@ -44,6 +44,7 @@ export default function JobsApproved() {
         const jobs = await Promise.all(data.map(async i => {
             const tokenUri = await tokenContract.tokenURI(i.tokenId)
             const meta = await axios.get(tokenUri)
+            console.log(meta)
             let job = {
                 attribute: meta.data.attribute,
                 title: i.title,

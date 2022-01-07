@@ -14,7 +14,16 @@ module.exports = {
     kovan: {
       url: `https://kovan.infura.io/v3/${process.env.PROJECT_ID}`,
       accounts: [process.env.PRIVATE_KEY]
+    },
+    ge: {
+      url: 'https://rpc.grassecon.net',
+      accounts: [process.env.PRIVATE_KEY],
     }
   },
-  solidity: "0.8.4",
+  solidity: {
+    version:  "0.8.4",
+    settings: {
+      evmVersion: 'byzantium'
+    }
+  }
 };
