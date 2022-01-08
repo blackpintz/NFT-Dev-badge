@@ -1,13 +1,14 @@
 
 import { useState } from 'react';
 import Web3Modal from 'web3modal';
+import Web3 from 'web3';
 import {ethers} from 'ethers';
 import {Paper, Button, TextField, Dialog, 
     DialogActions, DialogContent, DialogTitle} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import {useRouter} from 'next/router';
 
-import { jobPostAddress } from '../config'
+import { addresses } from "../config";
 
 import Job from '../artifacts/contracts/Job.sol/Job.json';
 
@@ -24,14 +25,25 @@ export default function JobPost(props) {
     const [open, setOpen] = useState(false)
     const [url, setUrl] = useState('')
     const router = useRouter()
+    let jobAddress;
 
     async function submitJob(_id, _url) {
+        const web3 = new Web3(window.ethereum)
+        const networkId = await web3.eth.net.getId() 
+        const {ge, rinkeby} = addresses
+        if(networkId === 8996) {
+            jobAddress = ge.jobPostAddress
+        }
+
+        if(networkId === 4) {
+            jobAddress = rinkeby.jobPostAddress 
+        }
         const web3Modal = new Web3Modal()
         const connection = await web3Modal.connect()
         const provider = new ethers.providers.Web3Provider(connection)
         const signer = provider.getSigner()
 
-        let contract = new ethers.Contract(jobPostAddress, Job.abi, signer)
+        let contract = new ethers.Contract(jobAddress, Job.abi, signer)
         let jobContract = await contract.createJobSubmitted(_id, _url)
         await jobContract.wait();
         setUrl('')

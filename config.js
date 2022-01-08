@@ -1,12 +1,8 @@
-export const jobPostAddress = '0x73c64bf14d6F70BFEaB2ff186cA055D154290800'
-export const nftaddress = '0x6Ca3cB14aA6F761712E1C18646AfBA4d5Ae249E8'
-export const metaAddress = '0x0eDf44e693aE685009595093E6D7C2663f251Ab5'
-
 export const addresses = {
     ge: {
-        jobPostAddress: '0x73c64bf14d6F70BFEaB2ff186cA055D154290800', 
-        nftaddress: '0x6Ca3cB14aA6F761712E1C18646AfBA4d5Ae249E8',
-        metaAddress: '0x0eDf44e693aE685009595093E6D7C2663f251Ab5'
+        jobPostAddress: '0x5c8acD116ADeb489455B79982B6897834E7daf8c', 
+        nftaddress: '0x43C03cD5A134d373e681DC2591fc5914DBb26195',
+        metaAddress: '0xC08b420D494A048A9a1Db532aEAFCA9bcAEB4298'
     },
     rinkeby: {
         jobPostAddress: '0x700e67F05F525475b7b2E8080277355529E74057',

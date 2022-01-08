@@ -11,8 +11,6 @@ contract Job is ReentrancyGuard {
     Counters.Counter private _jobIds;
     Counters.Counter private _jobsCompleted;
 
-    address constant public myAddress = 0x84876995504B3dB22a3e4a1F0028896f4cF0cB41;
-
     address payable owner;
 
     constructor() {
@@ -100,14 +98,14 @@ contract Job is ReentrancyGuard {
     }
 
     function createJobSubmitted(uint itemId,string memory url) public payable nonReentrant  {
-        // require(msg.sender != idToJobItem[itemId].assignmentHolder, "Job creator cannot be job submitter.");
+        require(msg.sender != idToJobItem[itemId].assignmentHolder, "Job creator cannot be job submitter.");
         idToJobItem[itemId].complete = true;
         _jobsCompleted.increment();
         uint submissionId = _jobsCompleted.current();
         idToJobSubmitted[submissionId] = JobSubmitted(
             submissionId,
             itemId,
-            payable(myAddress),
+            payable(msg.sender),
             url,
             idToJobItem[itemId].reward,
             false
@@ -116,7 +114,7 @@ contract Job is ReentrancyGuard {
         emit JobItemSubmitted(
             submissionId,
             itemId,
-            myAddress,
+            msg.sender,
             url,
             idToJobItem[itemId].reward,
             false
