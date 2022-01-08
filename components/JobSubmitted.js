@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import Web3Modal from 'web3modal';
+import Web3 from 'web3';
 import {create as ipfsHttpClient} from 'ipfs-http-client'
 import { useRouter } from "next/router";
 import { uniqueNamesGenerator, adjectives, animals  } from "unique-names-generator";
@@ -8,7 +9,7 @@ import { makeStyles } from '@mui/styles';
 
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 
-import { nftaddress, jobPostAddress, metaAddress, keyAddress } from "../config";
+import { addresses } from "../config";
 
 import NFT from '../artifacts/contracts/NFT.sol/NFT.json';
 import Job from '../artifacts/contracts/Job.sol/Job.json';
@@ -29,17 +30,33 @@ export default function JobSubmitted(props) {
     const router = useRouter();
     const {job} = props
     const {jobId, submissionId, assignmentTaker, url, reward, tokenId} = props.job
-    console.log(props.job)
+    let jobAddress;
+    let nftAddr;
+    let metaAddr;
 
     async function createNft() {
+        const web3 = new Web3(window.ethereum)
+        const networkId = await web3.eth.net.getId()
         const web3Modal = new Web3Modal()
         const connection = await web3Modal.connect()
         const provider = new ethers.providers.Web3Provider(connection)
         const signer = provider.getSigner()
 
-        let metadata = new ethers.Contract(metaAddress, Metadata.abi, signer)
-        let jobContract = new ethers.Contract(jobPostAddress, Job.abi, signer)
-        let tokenContract = new ethers.Contract(nftaddress, NFT.abi, signer)
+        const {ge, rinkeby} = addresses
+        if(networkId === 8996) {
+            jobAddress = ge.jobPostAddress;
+            nftAddr = ge.nftaddress;
+            metaAddr = ge.metaAddress
+        }
+
+        if(networkId === 4) {
+            jobAddress = rinkeby.jobPostAddress
+            nftAddr = rinkeby.nftaddress
+            metaAddr = rinkeby.metaAddress
+        }
+        let metadata = new ethers.Contract(metaAddr, Metadata.abi, signer)
+        let jobContract = new ethers.Contract(jobAddress, Job.abi, signer)
+        let tokenContract = new ethers.Contract(nftAddr, NFT.abi, signer)
         let tokenTransaction = await tokenContract.createToken()
         let tx = await tokenTransaction.wait()
         let event = tx.events[0]
@@ -47,7 +64,7 @@ export default function JobSubmitted(props) {
         let tokenId = value.toNumber()
         const blockHash = event.blockHash
 
-        await jobContract.transferRewardsAndNft(jobId,nftaddress,submissionId,tokenId, {value: reward})
+        await jobContract.transferRewardsAndNft(jobId,nftAddr,submissionId,tokenId, {value: reward})
         const hex = await metadata.hash(tokenId, url, blockHash)
         const colorHex = `#${hex.slice(2,8)}`
 
