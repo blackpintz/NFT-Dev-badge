@@ -16,7 +16,7 @@ User A can post a job assignment on the app. User B can claim the job and send a
 
 ## Live Demo
 
-https://winter-poetry-1710.on.fleek.co/
+https://nft-badges.on.fleek.co/
 
 ## Video recording
 
