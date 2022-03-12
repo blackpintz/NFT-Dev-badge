@@ -52,4 +52,4 @@ https://youtu.be/nMFhylYrIR8
 
 ## Tests
 
-Run ```npx hardhat test```.
+Run ```npx hardhat test```..
