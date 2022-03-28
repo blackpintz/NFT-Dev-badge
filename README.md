@@ -20,7 +20,7 @@ https://nft-badges.on.fleek.co/.
 
 ## Video recording
 
-https://youtu.be/nMFhylYrIR8
+https://youtu.be/nMFhylYrIR8.
 
 ## Directory Structure
 
