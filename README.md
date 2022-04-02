@@ -26,7 +26,7 @@ https://youtu.be/nMFhylYrIR8.
 
 - ```contract```: solidity contracts.
 - ```pages``` and ```components```: frontend files.
-- ```test```: test files
+- ```test```: test files.
 
 ## Getting Started
 
