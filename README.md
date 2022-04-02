@@ -1,6 +1,6 @@
 ## NFT Badge Viewer.
 
-### Short description
+### Short description.
 
 User A can post a job assignment on the app. User B can claim the job and send a link with the completed assignment. When User A confirms the work is completed, they will approve and user B will receive the payment for the assignment and an NFT. 
 
